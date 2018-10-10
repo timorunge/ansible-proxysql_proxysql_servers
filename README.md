@@ -1,17 +1,14 @@
-proxysql_proxysql_servers
-=========================
+# proxysql_proxysql_servers
 
 Adds or removes ProxySQL hosts using the ProxySQL admin interface.
 
-Install
--------
+## Install
 
 To use the `proxysql_proxysql_servers` module just copy the file into
 `./library`, alongside your top level playbooks, or copy it into the path
 specified by `ANSIBLE_LIBRARY` or the `--module-path` command line option.
 
-Options
--------
+## Options
 
 | parameter         | required | default   | choices                                  | comments                                                                        |
 | ----------------- | -------- | --------- | ---------------------------------------- | ------------------------------------------------------------------------------- |
@@ -29,8 +26,7 @@ Options
 | state             | no       | present   | <ul><li>present</li><li>absent</li></ul> | When C(present) - adds the host, when C(absent) - removes the host.             |
 | weight            | no       | 0         |                                          | Currently unused, but in the roadmap for future enhancements.                   |
 
-Examples
---------
+## Examples
 
 ```yaml
 # This example adds a server, it saves the ProxySQL server config to disk, but
@@ -56,17 +52,16 @@ Examples
     state: absent
 ```
 
-Dependencies
-------------
+## Dependencies
 
-* [python-mysqldb](https://pypi.python.org/pypi/mysqlclient)
+- [python-mysqldb](https://pypi.python.org/pypi/mysqlclient)
 
-License
--------
-GNU General Public License v3.0+ (see https://www.gnu.org/licenses/gpl-3.0.txt)
+## License
 
-Author Information
-------------------
+GNU General Public License v3.0+ (see
+[https://www.gnu.org/licenses/gpl-3.0.txt](https://www.gnu.org/licenses/gpl-3.0.txt))
+
+## Author Information
 
 - Based on the [proxysql_backend_servers](https://github.com/ansible/ansible/blob/devel/lib/ansible/modules/database/proxysql/proxysql_backend_servers.py) module from the Ansible core
 - Timo Runge
