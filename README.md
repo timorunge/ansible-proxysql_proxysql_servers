@@ -54,7 +54,8 @@ specified by `ANSIBLE_LIBRARY` or the `--module-path` command line option.
 
 ## Dependencies
 
-- [python-mysqldb](https://pypi.python.org/pypi/mysqlclient)
+- [Ansible >= 2.7.1](https://github.com/ansible/ansible/releases/tag/v2.7.1)
+- [PyMySQL](https://github.com/PyMySQL/PyMySQL)
 
 ## License
 
