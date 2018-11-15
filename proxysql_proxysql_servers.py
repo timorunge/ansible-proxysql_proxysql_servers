@@ -9,10 +9,10 @@ DOCUMENTATION = '''
 ---
 module: proxysql_proxysql_servers
 author: "Timo Runge (@timorunge)"
-short_description: Adds or removes ProxySQL hosts using the ProxySQL admin interface.
+short_description: Adds or removes ProxySQL hosts from ProxySQL admin interface.
 description:
-  - The M(proxysql_proxysql_servers) module adds or removes ProxySQL hosts using
-    the ProxySQL admin interface.
+   - The M(proxysql_proxysql_servers) module adds or removes ProxySQL hosts using
+     the ProxySQL admin interface.
 options:
   hostname:
     description:
@@ -89,25 +89,16 @@ stdout:
     }
 '''
 
-ANSIBLE_METADATA = {
-    'metadata_version': '1.1',
-    'status': ['preview'],
-    'supported_by': 'community'
-}
+ANSIBLE_METADATA = {'metadata_version': '1.1',
+                    'status': ['stableinterface'],
+                    'supported_by': 'community'}
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.mysql import mysql_connect
+from ansible.module_utils.mysql import mysql_connect, mysql_driver, mysql_driver_fail_msg
 from ansible.module_utils.six import iteritems
 from ansible.module_utils._text import to_native
 
-try:
-    import MySQLdb
-    import MySQLdb.cursors
-except ImportError:
-    MYSQLDB_FOUND = False
-else:
-    MYSQLDB_FOUND = True
 
 # ===========================================
 # proxysql module specific support methods.
@@ -127,10 +118,8 @@ def perform_checks(module):
             msg="port must be a valid unix port number (0-65535)"
         )
 
-    if not MYSQLDB_FOUND:
-        module.fail_json(
-            msg="the python mysqldb module is required"
-        )
+    if mysql_driver is None:
+        module.fail_json(msg=mysql_driver_fail_msg)
 
 
 def save_config_to_disk(cursor):
@@ -367,8 +356,8 @@ def main():
                                login_user,
                                login_password,
                                config_file,
-                               cursor_class=MySQLdb.cursors.DictCursor)
-    except MySQLdb.Error as e:
+                               cursor_class=mysql_driver.cursors.DictCursor)
+    except mysql_driver.Error as e:
         module.fail_json(
             msg="Unable to connect to ProxySQL Admin Module.. %s" % to_native(e)
         )
@@ -397,7 +386,7 @@ def main():
                                  " and doesn't need to be updated.")
                 result['server'] = \
                     proxysql_server.get_server_config(cursor)
-        except MySQLdb.Error as e:
+        except mysql_driver.Error as e:
             module.fail_json(
                 msg="Unable to modify server.. %s" % to_native(e)
             )
@@ -412,7 +401,7 @@ def main():
                 result['changed'] = False
                 result['msg'] = ("The server is already absent from the" +
                                  " proxysql_servers memory configuration")
-        except MySQLdb.Error as e:
+        except mysql_driver.Error as e:
             module.fail_json(
                 msg="Unable to remove server.. %s" % to_native(e)
             )
